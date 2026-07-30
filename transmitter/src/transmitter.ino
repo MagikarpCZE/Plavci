@@ -5,6 +5,9 @@
 #define TX_PIN D6
 #define BUTTON_PIN D2
 
+// Nastav na 1, az bude VL53L1X fyzicky pripojeny
+#define USE_TOF_SENSOR 0
+
 Adafruit_VL53L1X vl53 = Adafruit_VL53L1X();
 
 const int SEND_INTERVAL = 5000;
@@ -48,14 +51,18 @@ void loop() {
 }
 
 void initSensors() {
+#if USE_TOF_SENSOR
   Wire.begin();
   if (!vl53.begin(0x29, &Wire)) {
     Serial.println("Error: VL53L1X sensor not found!");
     while (1);
   }
-  
+
   vl53.startRanging();
   Serial.println("VL53L1X initialized.");
+#else
+  Serial.println("VL53L1X preskocen (USE_TOF_SENSOR=0).");
+#endif
 }
 
 void initLoRa() {
@@ -70,16 +77,18 @@ void initLoRa() {
 }
 
 void readSensor() {
+#if USE_TOF_SENSOR
   if (vl53.dataReady()) {
     // Convert mm to cm by dividing by 10.0
     currentDistanceCm = (float)vl53.distance() / 10.0;
     vl53.clearInterrupt();
-    
+
     Serial.print("Current distance: ");
     // Print with 3 decimal places
     Serial.print(currentDistanceCm, 3);
     Serial.println(" cm");
   }
+#endif
 }
 
 void sendData() {
