@@ -3,6 +3,7 @@
 
 #define RX_PIN D7
 #define TX_PIN D6
+#define BUTTON_PIN D2
 
 Adafruit_VL53L1X vl53 = Adafruit_VL53L1X();
 
@@ -10,19 +11,28 @@ const int SEND_INTERVAL = 5000;
 unsigned long lastSendTime = 0;
 int messageCount = 1;
 
+const unsigned long DEBOUNCE_DELAY = 50;
+int buttonState = HIGH;
+int lastButtonReading = HIGH;
+unsigned long lastDebounceTime = 0;
+
 // Global variable renamed to currentDistanceCm
 float currentDistanceCm = 0.0;
 
 void initSensors();
 void initLoRa();
+void initButton();
 void readSensor();
 void sendData();
+void sendLoRaString(const String &payload);
+void checkButton();
 void handleLoRaResponse();
 
 void setup() {
   Serial.begin(115200);
   initSensors();
   initLoRa();
+  initButton();
 }
 
 void loop() {
@@ -33,6 +43,7 @@ void loop() {
     lastSendTime = millis();
   }
 
+  checkButton();
   handleLoRaResponse();
 }
 
@@ -74,14 +85,40 @@ void readSensor() {
 void sendData() {
   // Convert float to string with 3 decimal places
   String distStr = String(currentDistanceCm, 3);
-  String payload = "Dist: " + distStr + "cm";
+  sendLoRaString("Dist: " + distStr + "cm");
+  messageCount++;
+}
+
+void sendLoRaString(const String &payload) {
   String command = "AT+TEST=TXLRSTR,\"" + payload + "\"";
 
   Serial.print("\n[SENDING] -> ");
   Serial.println(payload);
 
   Serial1.println(command);
-  messageCount++;
+}
+
+void initButton() {
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+}
+
+void checkButton() {
+  int reading = digitalRead(BUTTON_PIN);
+
+  if (reading != lastButtonReading) {
+    lastDebounceTime = millis();
+  }
+
+  if ((millis() - lastDebounceTime) > DEBOUNCE_DELAY && reading != buttonState) {
+    buttonState = reading;
+
+    if (buttonState == LOW) {
+      Serial.println("\n[BUTTON] Pressed -> sending BTN message");
+      sendLoRaString("BTN:1");
+    }
+  }
+
+  lastButtonReading = reading;
 }
 
 void handleLoRaResponse() {
