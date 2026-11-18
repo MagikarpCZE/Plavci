@@ -36,12 +36,23 @@ class MainWindow(QMainWindow):
 		motor = MotorWidget(1, len(self.motor_list)+1)
 		layout = self.ui.motors_container.widget().layout()
 		layout.addWidget(motor)
-
 		self.motor_list.append(motor)
+
+		self.log(f"Motor {len(self.motor_list)} was added.")
 
 	def delete_button_clicked(self) -> None:
 		"""Delete last motor."""
+		if len(self.motor_list) > 0:
+			motor = self.motor_list.pop(-1)
+			self.ui.motors_container.widget().layout().removeWidget(motor)
+			motor.deleteLater()
 
-		motor = self.motor_list.pop(-1)
-		self.ui.motors_container.widget().layout().removeWidget(motor)
-		motor.deleteLater()
+			self.log(f"Motor {len(self.motor_list)+1} was deleted.")
+
+		else:
+			self.log(f"Motor list is empty.")
+
+
+	def log(self, log: str) -> None:
+		"""Write text in console."""
+		self.ui.console_plain.appendPlainText(log)

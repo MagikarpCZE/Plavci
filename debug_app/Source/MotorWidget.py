@@ -20,5 +20,5 @@ class MotorWidget(QWidget):
 
 		self.ui = Ui_MotorWidget()
 		self.ui.setupUi(self)
-		self.ui.motor_label.setText(f"Motor {index}")
+		self.ui.motor_label.setText(f"Motor {index} intesity")
 		self.app = app
