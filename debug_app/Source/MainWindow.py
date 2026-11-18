@@ -1,19 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import os
-import re
-import json
-import pandas
 import PySide6
-from typing import Any
-from PySide6 import QtCharts, QtCore
-from PySide6.QtCharts import QChartView
-from PySide6.QtCore import QMargins, Qt
-from PySide6.QtGui import QFont, QBrush, QColor, QPainter
-from PySide6.QtWidgets import (QMainWindow, QTreeWidgetItem, 
-							   QMessageBox, QToolTip, QFileDialog, QApplication)
+from PySide6.QtWidgets import QMainWindow, QApplication
 from Source.__windows.main_window import Ui_MainWindow
+from .MotorWidget import MotorWidget
 
 class MainWindow(QMainWindow):
 	"""
@@ -42,8 +33,15 @@ class MainWindow(QMainWindow):
 
 	def add_button_clicked(self) -> None:
 		"""Add new motor."""
-		print('Add new motor')
+		motor = MotorWidget(1, len(self.motor_list)+1)
+		layout = self.ui.motors_container.widget().layout()
+		layout.addWidget(motor)
+
+		self.motor_list.append(motor)
 
 	def delete_button_clicked(self) -> None:
-		"""Delet last motor."""
-		print('Delete motor')
+		"""Delete last motor."""
+
+		motor = self.motor_list.pop(-1)
+		self.ui.motors_container.widget().layout().removeWidget(motor)
+		motor.deleteLater()

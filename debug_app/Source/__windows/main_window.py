@@ -31,6 +31,12 @@ class Ui_MainWindow(object):
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
+        self.console_plain = QPlainTextEdit(self.centralwidget)
+        self.console_plain.setObjectName(u"console_plain")
+        self.console_plain.setReadOnly(True)
+
+        self.gridLayout.addWidget(self.console_plain, 0, 1, 2, 1)
+
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.btn_add_motor = QPushButton(self.centralwidget)
@@ -50,30 +56,23 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addLayout(self.horizontalLayout, 0, 0, 1, 1)
 
-        self.scrollArea = QScrollArea(self.centralwidget)
-        self.scrollArea.setObjectName(u"scrollArea")
-        self.scrollArea.setWidgetResizable(True)
+        self.motors_container = QScrollArea(self.centralwidget)
+        self.motors_container.setObjectName(u"motors_container")
+        self.motors_container.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
         self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 285, 503))
         self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.motors_contrainer = QWidget(self.scrollAreaWidgetContents)
-        self.motors_contrainer.setObjectName(u"motors_contrainer")
-        self.motors_contrainer.setAutoFillBackground(False)
-        self.motors_contrainer.setLocale(QLocale(QLocale.English, QLocale.UnitedStates))
+        self.widget = QWidget(self.scrollAreaWidgetContents)
+        self.widget.setObjectName(u"widget")
+        self.widget.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
 
-        self.verticalLayout.addWidget(self.motors_contrainer)
+        self.verticalLayout.addWidget(self.widget)
 
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+        self.motors_container.setWidget(self.scrollAreaWidgetContents)
 
-        self.gridLayout.addWidget(self.scrollArea, 1, 0, 1, 1)
-
-        self.console_plain = QPlainTextEdit(self.centralwidget)
-        self.console_plain.setObjectName(u"console_plain")
-        self.console_plain.setReadOnly(True)
-
-        self.gridLayout.addWidget(self.console_plain, 0, 1, 2, 1)
+        self.gridLayout.addWidget(self.motors_container, 1, 0, 1, 1)
 
 
         self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
