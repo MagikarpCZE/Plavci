@@ -27,8 +27,8 @@ class MainWindow(QMainWindow):
 
 		self.motor_list = []
 		self.transmission_settings = {
-			'continuosly_data_transmission': 0,
-			'transmission_rate': False,
+			'continuosly_data_transmission': False,
+			'transmission_rate': 1,
 			'port': 'COM1'
 		}
 
@@ -63,7 +63,7 @@ class MainWindow(QMainWindow):
 
 	def options_button_clicked(self) -> None:
 		"""Handle click on transmission settings button."""
-		window = TransmissionSettings.TransmissionSettings()
+		window = TransmissionSettings.TransmissionSettings(self.transmission_settings)
 		if window.exec():
 			self.transmission_settings = window.get_parameters()
 			self.change_send_data_button_state()

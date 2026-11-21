@@ -8,15 +8,15 @@ from Source.__windows.transmission_settings import Ui_Dialog
 
 class TransmissionSettings(QDialog):
 	"""The Transmission settings window."""
-	def __init__(self) -> None:
+	def __init__(self, settings: dict) -> None:
 		"""Class initialization."""
 		super(TransmissionSettings, self).__init__()
 
 		self.ui = Ui_Dialog()
 		self.ui.setupUi(self)
-		self.inicialize_ui()
+		self.inicialize_ui(settings)
 
-	def inicialize_ui(self) -> None:
+	def inicialize_ui(self, settings: dict) -> None:
 		"""Initialize the basic functions and settings of the window."""
 		self.ui.transmission_rate.setEnabled(False)	
 
@@ -25,12 +25,13 @@ class TransmissionSettings(QDialog):
 		self.ui.transmission_rate.setValidator(QIntValidator(1, 2147483647, self))
 
 		self.fill_combobox_with_com_ports()
+		self.set_settings(settings)
 
 	def get_parameters(self) -> dict[str: bool, str]:
 		"""Return local settings to main window."""
 		return {
 			'continuosly_data_transmission': self.ui.send_data_continuosly.isChecked() == 1,
-			'transmission_rate': self.ui.transmission_rate.text() or None,
+			'transmission_rate': self.ui.transmission_rate.text() or 1,
 			'port': f'COM{self.ui.cmb_port.currentIndex() + 1}'
 		}
 
@@ -48,8 +49,17 @@ class TransmissionSettings(QDialog):
 
 	def save_settings(self) -> None:
 		"""Save local settings."""
-		if self.ui.send_data_continuosly.isChecked() and self.ui.transmission_rate.text() != '':
+		if self.ui.send_data_continuosly.isChecked() and self.ui.transmission_rate.text() != '' and int(self.ui.transmission_rate.text()) > 0:
 			self.accept()
 
 		elif not(self.ui.send_data_continuosly.isChecked()):
 			self.accept()
+
+	def set_settings(self, settings: dict) -> None:
+		"""Set actual settings of program."""
+		self.ui.send_data_continuosly.setChecked(settings['continuosly_data_transmission'])
+		if self.ui.send_data_continuosly.isChecked():
+			self.ui.transmission_rate.setText(settings['transmission_rate'])
+
+		port = int(settings['port'].replace('COM', ''))-1
+		self.ui.cmb_port.setCurrentIndex(port)
