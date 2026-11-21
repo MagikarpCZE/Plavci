@@ -23,13 +23,19 @@ class MainWindow(QMainWindow):
 		self.ui = Ui_MainWindow()
 		self.ui.setupUi(self)
 		self.app = app
+		self.initialize_ui()
 
 		self.motor_list = []
-		self.initialize_ui()
+		self.transmission_settings = {
+			'continuosly_data_transmission': 0,
+			'transmission_rate': False,
+			'port': 'COM1'
+		}
 
 	def initialize_ui(self) -> None:
 		"""Initialize the basic functions and settings of the window."""
 		self.ui.actionTransmission_Settings.triggered.connect(self.options_button_clicked)
+		self.ui.actionCommunication_Send_Data.triggered.connect(self.send_data_button_clicked)
 
 		self.ui.btn_add_motor.clicked.connect(self.add_button_clicked)
 		self.ui.btn_delete_motor.clicked.connect(self.delete_button_clicked)
@@ -41,7 +47,7 @@ class MainWindow(QMainWindow):
 		layout.addWidget(motor)
 		self.motor_list.append(motor)
 
-		self.log(f"Motor {len(self.motor_list)} was added.")
+		self.log(f"[SYSTEM] Motor {len(self.motor_list)} was added.")
 
 	def delete_button_clicked(self) -> None:
 		"""Delete last motor."""
@@ -50,17 +56,46 @@ class MainWindow(QMainWindow):
 			self.ui.motors_container.widget().layout().removeWidget(motor)
 			motor.deleteLater()
 
-			self.log(f"Motor {len(self.motor_list)+1} was deleted.")
+			self.log(f"[SYSTEM] Motor {len(self.motor_list)+1} was deleted.")
 
 		else:
-			self.log(f"Motor list is empty.")
+			self.log(f"[SYSTEM] Motor list is empty.")
 
 	def options_button_clicked(self) -> None:
 		"""Handle click on transmission settings button."""
 		window = TransmissionSettings.TransmissionSettings()
 		if window.exec():
-			print('da')
+			self.transmission_settings = window.get_parameters()
+			self.change_send_data_button_state()
 
+		lines = "\n".join(f"\t{k}: {v}" for k, v in self.transmission_settings.items())
+		self.log(f"[SYSTEM] Set settings:\n{lines}\n")
+
+	def send_data_button_clicked(self) -> None:
+		"""Handle click on send data button."""
+		if len(self.motor_list) > 0:
+			self.serial_communication()
+
+			string_to_send = ''
+
+			for motor in self.motor_list:
+				string_to_send = f'{string_to_send}{motor.get_intensity()};' 
+
+			self.log(f"[SYSTEM] Data just sended on port {self.transmission_settings['port']}")
+			self.log(f"Sended data string: {string_to_send}\n")
+
+		else:
+			self.log("[SYSTEM] Data was not sended, motor list is empty.")
+
+	def change_send_data_button_state(self) -> None:
+		"""Check and change send data button enabled state."""
+		self.ui.actionCommunication_Send_Data.setEnabled(True)
+		if self.transmission_settings['continuosly_data_transmission']:
+			self.ui.actionCommunication_Send_Data.setEnabled(False)
+
+	def serial_communication(self) -> None:
+		"""Function for future serial comunication."""
+		pass
 
 	def log(self, log: str) -> None:
 		"""Write text in console."""

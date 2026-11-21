@@ -50,19 +50,19 @@ class Ui_Dialog(object):
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.pushButton = QPushButton(Dialog)
-        self.pushButton.setObjectName(u"pushButton")
+        self.save_button = QPushButton(Dialog)
+        self.save_button.setObjectName(u"save_button")
 
-        self.horizontalLayout.addWidget(self.pushButton)
+        self.horizontalLayout.addWidget(self.save_button)
 
         self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
-        self.pushButton_2 = QPushButton(Dialog)
-        self.pushButton_2.setObjectName(u"pushButton_2")
+        self.cancel_button = QPushButton(Dialog)
+        self.cancel_button.setObjectName(u"cancel_button")
 
-        self.horizontalLayout.addWidget(self.pushButton_2)
+        self.horizontalLayout.addWidget(self.cancel_button)
 
         self.horizontalLayout.setStretch(0, 3)
         self.horizontalLayout.setStretch(1, 5)
@@ -76,10 +76,10 @@ class Ui_Dialog(object):
 
         self.formLayout = QFormLayout()
         self.formLayout.setObjectName(u"formLayout")
-        self.checkBox = QCheckBox(Dialog)
-        self.checkBox.setObjectName(u"checkBox")
+        self.send_data_continuosly = QCheckBox(Dialog)
+        self.send_data_continuosly.setObjectName(u"send_data_continuosly")
 
-        self.formLayout.setWidget(3, QFormLayout.ItemRole.FieldRole, self.checkBox)
+        self.formLayout.setWidget(3, QFormLayout.ItemRole.FieldRole, self.send_data_continuosly)
 
         self.transmission_rate = QLineEdit(Dialog)
         self.transmission_rate.setObjectName(u"transmission_rate")
@@ -103,9 +103,9 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QCoreApplication.translate("Dialog", u"Dialog", None))
         self.label_2.setText(QCoreApplication.translate("Dialog", u"Port", None))
-        self.pushButton.setText(QCoreApplication.translate("Dialog", u"Save", None))
-        self.pushButton_2.setText(QCoreApplication.translate("Dialog", u"Cancel", None))
-        self.checkBox.setText(QCoreApplication.translate("Dialog", u"Send Data Continuosly", None))
+        self.save_button.setText(QCoreApplication.translate("Dialog", u"Save", None))
+        self.cancel_button.setText(QCoreApplication.translate("Dialog", u"Cancel", None))
+        self.send_data_continuosly.setText(QCoreApplication.translate("Dialog", u"Send Data Continuosly", None))
         self.label.setText(QCoreApplication.translate("Dialog", u"Transmission Rate", None))
     # retranslateUi
 

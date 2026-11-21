@@ -40,7 +40,7 @@
    <item row="2" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout" stretch="3,5,3">
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="save_button">
        <property name="text">
         <string>Save</string>
        </property>
@@ -60,7 +60,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="cancel_button">
        <property name="text">
         <string>Cancel</string>
        </property>
@@ -84,7 +84,7 @@
    <item row="0" column="0">
     <layout class="QFormLayout" name="formLayout">
      <item row="3" column="1">
-      <widget class="QCheckBox" name="checkBox">
+      <widget class="QCheckBox" name="send_data_continuosly">
        <property name="text">
         <string>Send Data Continuosly</string>
        </property>
