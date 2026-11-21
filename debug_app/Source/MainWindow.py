@@ -4,7 +4,8 @@
 import PySide6
 from PySide6.QtWidgets import QMainWindow, QApplication
 from Source.__windows.main_window import Ui_MainWindow
-from .MotorWidget import MotorWidget
+from Source.MotorWidget import MotorWidget
+import Source.TransmissionSettings as TransmissionSettings
 
 class MainWindow(QMainWindow):
 	"""
@@ -28,6 +29,8 @@ class MainWindow(QMainWindow):
 
 	def initialize_ui(self) -> None:
 		"""Initialize the basic functions and settings of the window."""
+		self.ui.actionTransmission_Settings.triggered.connect(self.options_button_clicked)
+
 		self.ui.btn_add_motor.clicked.connect(self.add_button_clicked)
 		self.ui.btn_delete_motor.clicked.connect(self.delete_button_clicked)
 
@@ -51,6 +54,12 @@ class MainWindow(QMainWindow):
 
 		else:
 			self.log(f"Motor list is empty.")
+
+	def options_button_clicked(self) -> None:
+		"""Handle click on transmission settings button."""
+		window = TransmissionSettings.TransmissionSettings()
+		if window.exec():
+			print('da')
 
 
 	def log(self, log: str) -> None:

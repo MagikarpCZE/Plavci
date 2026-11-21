@@ -11,20 +11,25 @@
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
     QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
+    QCursor, QFont, QFontDatabase, QGradient,
+    QIcon, QImage, QKeySequence, QLinearGradient,
+    QPainter, QPalette, QPixmap, QRadialGradient,
+    QTransform)
 from PySide6.QtWidgets import (QApplication, QGridLayout, QHBoxLayout, QMainWindow,
-    QMenuBar, QPlainTextEdit, QPushButton, QScrollArea,
-    QSizePolicy, QSpacerItem, QStatusBar, QVBoxLayout,
-    QWidget)
+    QMenu, QMenuBar, QPlainTextEdit, QPushButton,
+    QScrollArea, QSizePolicy, QSpacerItem, QStatusBar,
+    QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(600, 600)
+        self.actionTransmission_Settings = QAction(MainWindow)
+        self.actionTransmission_Settings.setObjectName(u"actionTransmission_Settings")
+        self.actionCommunication_Send_Data = QAction(MainWindow)
+        self.actionCommunication_Send_Data.setObjectName(u"actionCommunication_Send_Data")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.gridLayout_2 = QGridLayout(self.centralwidget)
@@ -81,10 +86,19 @@ class Ui_MainWindow(object):
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
         self.menubar.setGeometry(QRect(0, 0, 600, 22))
+        self.menuOptions = QMenu(self.menubar)
+        self.menuOptions.setObjectName(u"menuOptions")
+        self.menuMain = QMenu(self.menubar)
+        self.menuMain.setObjectName(u"menuMain")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
         MainWindow.setStatusBar(self.statusbar)
+
+        self.menubar.addAction(self.menuMain.menuAction())
+        self.menubar.addAction(self.menuOptions.menuAction())
+        self.menuOptions.addAction(self.actionTransmission_Settings)
+        self.menuMain.addAction(self.actionCommunication_Send_Data)
 
         self.retranslateUi(MainWindow)
 
@@ -93,7 +107,11 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
+        self.actionTransmission_Settings.setText(QCoreApplication.translate("MainWindow", u"Signal Transmission Settings", None))
+        self.actionCommunication_Send_Data.setText(QCoreApplication.translate("MainWindow", u"Send Data", None))
         self.btn_add_motor.setText(QCoreApplication.translate("MainWindow", u"Add Motor", None))
         self.btn_delete_motor.setText(QCoreApplication.translate("MainWindow", u"Delete Motor", None))
+        self.menuOptions.setTitle(QCoreApplication.translate("MainWindow", u"Options", None))
+        self.menuMain.setTitle(QCoreApplication.translate("MainWindow", u"Communication", None))
     # retranslateUi
 

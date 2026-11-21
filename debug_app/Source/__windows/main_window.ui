@@ -94,8 +94,32 @@
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuOptions">
+    <property name="title">
+     <string>Options</string>
+    </property>
+    <addaction name="actionTransmission_Settings"/>
+   </widget>
+   <widget class="QMenu" name="menuMain">
+    <property name="title">
+     <string>Communication</string>
+    </property>
+    <addaction name="actionCommunication_Send_Data"/>
+   </widget>
+   <addaction name="menuMain"/>
+   <addaction name="menuOptions"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionTransmission_Settings">
+   <property name="text">
+    <string>Signal Transmission Settings</string>
+   </property>
+  </action>
+  <action name="actionCommunication_Send_Data">
+   <property name="text">
+    <string>Send Data</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

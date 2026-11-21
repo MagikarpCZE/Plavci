@@ -7,7 +7,7 @@ from Source.__windows.motor_widget import Ui_MotorWidget
 
 class MotorWidget(QWidget):
 	"""
-	The main window of the program.
+	The motor widget of the program.
 
 	Attributes:
 		app(QApplication): reference to an instance of the QApplication 
