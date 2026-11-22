@@ -6,6 +6,7 @@ from PySide6.QtWidgets import QMainWindow, QApplication
 from Source.__windows.main_window import Ui_MainWindow
 from Source.MotorWidget import MotorWidget
 import Source.TransmissionSettings as TransmissionSettings
+import Source.DataSender as DataSender
 
 class MainWindow(QMainWindow):
 	"""
@@ -32,10 +33,15 @@ class MainWindow(QMainWindow):
 			'port': 'COM1'
 		}
 
+		self.DataSender = DataSender.DataSender('0', 10, self)
+		self.DataSender.log_message.connect(self.log)
+
 	def initialize_ui(self) -> None:
 		"""Initialize the basic functions and settings of the window."""
 		self.ui.actionTransmission_Settings.triggered.connect(self.options_button_clicked)
 		self.ui.actionCommunication_Send_Data.triggered.connect(self.send_data_button_clicked)
+		self.ui.actionStart_Communication.triggered.connect(self.send_data_continuosly)
+		self.ui.actionStop_Communication.triggered.connect(self.stop_sending_data)
 
 		self.ui.btn_add_motor.clicked.connect(self.add_button_clicked)
 		self.ui.btn_delete_motor.clicked.connect(self.delete_button_clicked)
@@ -59,14 +65,14 @@ class MainWindow(QMainWindow):
 			self.log(f"[SYSTEM] Motor {len(self.motor_list)+1} was deleted.")
 
 		else:
-			self.log(f"[SYSTEM] Motor list is empty.")
+			self.log(f"[ERROR] Motor list is empty.")
 
 	def options_button_clicked(self) -> None:
 		"""Handle click on transmission settings button."""
 		window = TransmissionSettings.TransmissionSettings(self.transmission_settings)
 		if window.exec():
 			self.transmission_settings = window.get_parameters()
-			self.change_send_data_button_state()
+			self.change_send_data_buttons_state()
 
 		lines = "\n".join(f"\t{k}: {v}" for k, v in self.transmission_settings.items())
 		self.log(f"[SYSTEM] Set settings:\n{lines}\n")
@@ -87,15 +93,23 @@ class MainWindow(QMainWindow):
 		else:
 			self.log("[SYSTEM] Data was not sended, motor list is empty.")
 
-	def change_send_data_button_state(self) -> None:
+	def send_data_continuosly(self) -> None:
+		self.DataSender.change_settings(self.transmission_settings['port'], int(self.transmission_settings['transmission_rate']))
+		self.DataSender.start_sending()
+
+	def stop_sending_data(self) -> None:
+		self.DataSender.stop_sending()
+
+	def change_send_data_buttons_state(self) -> None:
 		"""Check and change send data button enabled state."""
 		self.ui.actionCommunication_Send_Data.setEnabled(True)
+		self.ui.actionStart_Communication.setEnabled(False)
+		self.ui.actionStop_Communication.setEnabled(False)
+
 		if self.transmission_settings['continuosly_data_transmission']:
 			self.ui.actionCommunication_Send_Data.setEnabled(False)
-
-	def serial_communication(self) -> None:
-		"""Function for future serial comunication."""
-		pass
+			self.ui.actionStart_Communication.setEnabled(True)
+			self.ui.actionStop_Communication.setEnabled(True)
 
 	def log(self, log: str) -> None:
 		"""Write text in console."""

@@ -31,7 +31,7 @@ class TransmissionSettings(QDialog):
 		"""Return local settings to main window."""
 		return {
 			'continuosly_data_transmission': self.ui.send_data_continuosly.isChecked() == 1,
-			'transmission_rate': self.ui.transmission_rate.text() or 1,
+			'transmission_rate': 1/float(self.ui.transmission_rate.text()) or 1.0,
 			'port': f'COM{self.ui.cmb_port.currentIndex() + 1}'
 		}
 
@@ -59,7 +59,8 @@ class TransmissionSettings(QDialog):
 		"""Set actual settings of program."""
 		self.ui.send_data_continuosly.setChecked(settings['continuosly_data_transmission'])
 		if self.ui.send_data_continuosly.isChecked():
-			self.ui.transmission_rate.setText(settings['transmission_rate'])
+			rate = str(int(1/settings['transmission_rate']))
+			self.ui.transmission_rate.setText(rate)
 
 		port = int(settings['port'].replace('COM', ''))-1
 		self.ui.cmb_port.setCurrentIndex(port)
